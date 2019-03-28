@@ -1,0 +1,31 @@
+﻿{
+	"name": "Remark Google Results",
+	"version": "1.19.3",
+	"manifest_version": 2,
+	"description":"Remark Google Results",
+	"icons": {"48": "source/48.png"},
+
+	"permissions": [ "contextMenus", "\u003Call_urls>", "activeTab",  "storage" ],
+
+	"browser_action": {
+		"default_icon": "source/48.png",
+        "default_title": "Remark Google Results",
+		"default_popup": "browseraction/popup.html"
+	},
+
+	"background": {"scripts": ["background.js"]},
+
+    "options_ui": {
+      "open_in_tab": true,
+      "page": "options/index.html"
+    },
+
+	"content_scripts": [{
+        "all_frames": true,
+		"js": ["content.js"],
+        "match_about_blank": true,
+        "matches": [ "\u003Call_urls>" ],
+		"run_at":"document_start",
+		"css": ["source/mkstyles.css"]
+	}]
+}

@@ -1,0 +1,92 @@
+.mk_edit{
+    width: 14px;
+    height: 14px;
+    text-align: center;
+    display: inline-block;
+    color: #006621;
+    font-size: 16px;
+    line-height: 14px;
+    cursor: pointer;
+    border: 1px solid #006621;
+    border-radius: 2px;
+}
+#mk_mask{
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: none;
+}
+#mk_remarks_settting{
+    width: 400px;
+    height: 300px;
+    background: #fff;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+    position: absolute;
+    top: 50%;
+    border-radius: 4px;
+}
+#mk_remarks_settting p{
+    margin: 15px;
+}
+#remarks_1, 
+#remarks_2{
+    display:none;
+}
+#remarks_1 input, 
+#remarks_2 input{
+    padding: 0 3px;
+    width:250px
+}
+.remarkstype_1 #remarks_1,
+.remarkstype_2 #remarks_2{
+    display:block;
+}
+.mk_c1 {
+    color: #fff;
+    background: red;
+    padding: 0 4px;
+    font-size: 13px;
+}
+.mk_c2 {
+    color: #fff;
+    background: darkorange;
+    padding: 0 4px;
+    font-size: 13px;
+}
+.mk_c3 {
+    color: #fff;
+    background: darkblue;
+    padding: 0 4px;
+    font-size: 13px;
+}
+.mk_c4 {
+    color: #fff;
+    background: darkgreen;
+    padding: 0 4px;
+    font-size: 13px;
+}
+#mk_url_1, #mk_url_2{
+    color:#999
+}
+#mk_confirm{
+    height: 30px;
+    cursor: pointer;
+}
+#mk_cancel,
+#mk_remove{
+    float: right;
+    height: 30px;
+    cursor: pointer;
+    margin-left:10px;
+}
+.mk_label{
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: text-bottom;
+}
