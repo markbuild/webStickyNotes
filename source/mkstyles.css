@@ -10,6 +10,9 @@
     border: 1px solid #006621;
     border-radius: 2px;
 }
+.mk_edit:before{
+    content:'+';
+}
 #mk_mask{
     background: rgba(0, 0, 0, 0.6);
     width: 100%;
@@ -29,7 +32,12 @@
     margin-top: -150px;
     position: absolute;
     top: 50%;
+    font-family:arial;
+    font-size:12px;
     border-radius: 4px;
+}
+#mk_remarks_settting button{
+    font-size:12px
 }
 #mk_remarks_settting p{
     margin: 15px;
@@ -89,4 +97,23 @@
     display: inline-block;
     margin-left: 10px;
     vertical-align: text-bottom;
+}
+#remarks_bar{
+    font-family: arial;
+    font-size: 12px;
+    position:fixed;
+    display: block;
+    height: 22px;
+    padding: 3px;
+    bottom: 0;
+    right: 0;
+    z-index: 9999999999;
+    background: #fff;
+    text-align: left;
+}
+#mk_hide{
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 6px;
+    margin-left: 6px;
 }
