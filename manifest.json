@@ -1,15 +1,15 @@
 ﻿{
-	"name": "Remark Google Results",
-	"version": "1.19.3",
+	"name": "webStickyNotes",
+	"version": "2.0.4",
 	"manifest_version": 2,
-	"description":"Remark Google Results",
+	"description":"Add Web Sticky Notes on your browser",
 	"icons": {"48": "source/48.png"},
 
 	"permissions": [ "contextMenus", "\u003Call_urls>", "activeTab",  "storage" ],
 
 	"browser_action": {
 		"default_icon": "source/48.png",
-        "default_title": "Remark Google Results",
+        "default_title": "webStickyNotes",
 		"default_popup": "browseraction/popup.html"
 	},
 

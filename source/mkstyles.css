@@ -1,3 +1,16 @@
+#mk_options input{border: 1px solid #000;padding:2px 5px;font-size:12px}
+#mk_options .box {
+    border: 1px solid #000;
+    float: left;
+    width: 500px;
+    margin-right: 20px;
+    height: 130px;
+    background: #ebebeb;
+    padding: 15px;
+}
+#mk_options .box h3{
+    margin:0;
+}
 .mk_edit{
     width: 14px;
     height: 14px;
@@ -23,7 +36,7 @@
     z-index: 9999;
     display: none;
 }
-#mk_remarks_settting{
+#mk_label_settting{
     width: 400px;
     height: 300px;
     background: #fff;
@@ -33,51 +46,72 @@
     position: absolute;
     top: 50%;
     font-family:arial;
-    font-size:12px;
+    font-size:12px!important;
     border-radius: 4px;
+    color: #000!important;
 }
-#mk_remarks_settting button{
-    font-size:12px
+#mk_label_settting button{
+    font-size:12px!important;
+    color: #000!important;
+    padding: 0 5px!important;
 }
-#mk_remarks_settting p{
-    margin: 15px;
+#mk_label_settting p{
+    margin: 15px!important;
+    color: #000!important;
+    font-size:12px!important;
 }
-#remarks_1, 
-#remarks_2{
+#label_1, 
+#label_2{
     display:none;
 }
-#remarks_1 input, 
-#remarks_2 input{
+#label_1 input, 
+#label_2 input{
     padding: 0 3px;
     width:250px
 }
-.remarkstype_1 #remarks_1,
-.remarkstype_2 #remarks_2{
+.labeltype_1 #label_1,
+.labeltype_2 #label_2{
     display:block;
 }
 .mk_c1 {
     color: #fff;
-    background: red;
+    background: #F64339;
     padding: 0 4px;
     font-size: 13px;
+    outline: #F64339 solid 1px;
+    outline-offset: 1px;
+    display: inline-block;
+    font-family: Arial;
 }
 .mk_c2 {
     color: #fff;
-    background: darkorange;
+    background: #F6A13A;
     padding: 0 4px;
     font-size: 13px;
+    outline: #F6A13A solid 1px;
+    outline-offset: 1px;
+    display: inline-block;
+    font-family: Arial;
 }
 .mk_c3 {
     color: #fff;
-    background: darkblue;
+    background: #5454B6;
     padding: 0 4px;
     font-size: 13px;
+    outline: #5454B6 solid 1px;
+    outline-offset: 1px;
+    display: inline-block;
+    font-family: Arial;
 }
 .mk_c4 {
     color: #fff;
-    background: darkgreen;
+    background: #299229;
     padding: 0 4px;
     font-size: 13px;
+    outline: #299229 solid 1px;
+    outline-offset: 1px;
+    display: inline-block;
+    font-family: Arial;
 }
 #mk_url_1, #mk_url_2{
     color:#999
@@ -98,7 +132,7 @@
     margin-left: 10px;
     vertical-align: text-bottom;
 }
-#remarks_bar{
+#label_bar{
     font-family: arial;
     font-size: 12px;
     position:fixed;
@@ -116,4 +150,12 @@
     cursor: pointer;
     margin-right: 6px;
     margin-left: 6px;
+    color: rgb(0, 102, 33)!important;
+}
+#result td{
+    margin:5px;
+    padding: 5px 20px 5px 0;
+}
+#synurl{
+    width:400px;
 }

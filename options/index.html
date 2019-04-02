@@ -2,38 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<style>
-input{border: 1px solid #000;padding:2px 5px;font-size:12px}
-.box {
-    border: 1px solid #000;
-    float: left;
-    width: 300px;
-    margin-right: 20px;
-    height: 150px;
-    background: #ebebeb;
-    padding: 15px;
-}
-</style>
 <link href="../source/mkstyles.css" rel='stylesheet' type='text/css'>
 </head>
-<body>
-<h1>Remark Google Results Extension Options</h1>
+<body id="mk_options">
+<h1>webStickyNotes Extension Options</h1>
+<p><img src="../source/128.png" /></p>
+Get More information from <a href="https://github.com/markbuild/webStickyNotes/blob/master/README.md" target="_blank">here</a>.
 <div>
-    <h2>Backup and Restore</h2>
+    <h2>Backup and Restore the database</h2>
     <div class="box">
         <h3>Backup</h3>
         <p>Click to backup your settings, or right-click and select Save link as.</p>
         <a id="downloadbackup" href="">Click to download backup</a>
+        <p>Please keep the habit of backup if you don't have webDAV enabled.</p>
     </div>
     <div class="box">
         <h3>Restore</h3>
         <p>Choose a backup file to restore.</p>
         <p><input id="uploadbackupfile" type="file" /></p>
+        <p>(Restore will cover the database on WebDAV if you enabled the WebDAV)</p> 
     </div>
     <div style="clear:both"></div>
+    <h2>Synchronize your database with WebDAV</h2>
+    WebDAV URL: <input id="synurl" placeholder="eg: https://dav.jianguoyun.com/dav/sync/webStickyNotes_database.bak"> Username: <input id="synusername"> Password: <input id="synpassword" type="password"> <button id="savesyninfo">Save and Fetch</button> <span id="last_syn_time"></span>
+    <p><a href="https://github.com/markbuild/webStickyNotes/blob/master/HowToEnableWebDAV.md" target="_blank">How to enable WebDAV?</a></p>
     <h2>Database</h2>
-    <input id="search" placeholder="Search Remarks">
-    <button id="display_all_btn">Search</button>
+    <input id="search" placeholder="Search sticky note Labels">
+    <button id="display_all_btn">Search</button> <span style="color:#aaa">(Empty search input returns all sticky note labels)</span>
     <div id="result"></div>
 </div>
 <script src="options.js"></script>
