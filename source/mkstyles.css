@@ -1,4 +1,8 @@
-#mk_options input{border: 1px solid #000;padding:2px 5px;font-size:12px}
+#mk_options input{
+    border: 1px solid #000;
+    padding:2px 5px;
+    font-size:12px
+}
 #mk_options .box {
     border: 1px solid #000;
     float: left;
@@ -16,12 +20,19 @@
     height: 14px;
     text-align: center;
     display: inline-block;
-    color: #006621;
     font-size: 16px;
     line-height: 14px;
     cursor: pointer;
-    border: 1px solid #006621;
+    color: #fff;
+    background: #3F51B5;
+    border: 1px solid #283593;
     border-radius: 2px;
+}
+.mk_edit:hover{
+     box-shadow:2px 2px 0 0 #8687CD;
+     text-decoration:none;
+    -webkit-transform: translate(-2px,-2px);
+    transform: translate(-2px,-2px);
 }
 .mk_edit:before{
     content:'+';
@@ -49,7 +60,13 @@
     font-size:12px!important;
     border-radius: 4px;
     color: #000!important;
+    text-align:left!important; 
 }
+
+#mk_label_settting input{
+    margin:0 6px 0!important;
+    padding:0!important;
+} 
 #mk_label_settting button{
     font-size:12px!important;
     color: #000!important;
@@ -60,25 +77,26 @@
     color: #000!important;
     font-size:12px!important;
 }
-#label_1, 
-#label_2{
+#mk_label_settting #label_1, 
+#mk_label_settting #label_2{
     display:none;
 }
-#label_1 input, 
-#label_2 input{
-    padding: 0 3px;
-    width:250px
+#mk_label_settting #label_1 input, 
+#mk_label_settting #label_2 input{
+    height:30px!important;
+    padding: 0 3px!important;
+    width:250px!important;
 }
-.labeltype_1 #label_1,
-.labeltype_2 #label_2{
+.labeltype_1 #mk_label_settting #label_1,
+.labeltype_2 #mk_label_settting #label_2{
     display:block;
 }
 .mk_c1 {
     color: #fff;
-    background: #F64339;
+    background: #EF5350;
     padding: 0 4px;
     font-size: 13px;
-    outline: #F64339 solid 1px;
+    outline: #EF5350 solid 1px;
     outline-offset: 1px;
     display: inline-block;
     font-family: Arial;
@@ -137,20 +155,29 @@
     font-size: 12px;
     position:fixed;
     display: block;
-    height: 22px;
-    padding: 3px;
+    padding: 0px 5px;
     bottom: 0;
     right: 0;
     z-index: 9999999999;
-    background: #fff;
     text-align: left;
+    background: #fff;
+    border-radius: 4px 0 0 0;
+    border-left: 1px solid #3e51b5;
+    border-top: 1px solid #3e51b5;
+    height: 26px;
+}
+#label_bar .mk_edit,
+#label_bar .mk_label{
+    margin-top:4px;
 }
 #mk_hide{
-    display: inline-block;
-    cursor: pointer;
-    margin-right: 6px;
-    margin-left: 6px;
-    color: rgb(0, 102, 33)!important;
+    display: inline-block!important;
+    cursor: pointer!important;
+    margin-right: 6px!important;
+    margin-left: 6px!important;
+    font-size: 12px!important;
+    color: #3F51B5!important;
+    font-weight: bold!important;
 }
 #result td{
     margin:5px;

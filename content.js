@@ -5,6 +5,7 @@ if(navigator.userAgent.includes("Firefox")) {
 } 
 
 document.addEventListener("DOMContentLoaded", _ => {
+    if(self != top) return;
     const labelSettingBlock = document.createElement("div")
     labelSettingBlock.innerHTML='<div id="mk_mask" class="labeltype_1"><div id="mk_label_settting">'+
         '<p><input type="radio" name="label_type" value="1" checked>Notes for the Site Ⓢ: <span id="mk_url_1"></span></p><p><input type="radio" name="label_type" value="2">Notes for the Page Ⓟ: <span id="mk_url_2"></span></p>'+
