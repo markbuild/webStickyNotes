@@ -1,7 +1,9 @@
-#mk_options input{
-    border: 1px solid #000;
-    padding:2px 5px;
-    font-size:12px
+#mk_options a {
+    color: #1a237e;
+}
+#mk_options input[type="file" i]::-webkit-file-upload-button {
+    border: 0;
+    line-height: 22px;
 }
 #mk_options .box {
     border: 1px solid #000;
@@ -13,7 +15,57 @@
     padding: 15px;
 }
 #mk_options .box h3{
-    margin:0;
+    margin: 0;
+}
+#mk_options #rename {
+    display: inline-block;
+    float: right;
+}
+#mk_options #result {
+    margin: 20px 0;
+    height: 400px;
+    overflow-y: scroll;
+}
+#mk_options #result td{
+    margin:5px;
+    padding: 5px 20px 5px 0;
+}
+#mk_options #result td .del {
+    opacity: 0;
+    margin-left: 10px;
+    cursor: pointer;
+}
+#mk_options #result td:hover .del {
+    opacity: 1;
+}
+#mk_options #synurl {
+    width: 400px;
+}
+#mk_options #category {
+    height: 24px;
+    display: flex;
+    background: #f0f3f4;
+    margin: 10px 0;
+    border: 1px solid #d0d3d6;
+}
+#mk_options #category li {
+    list-style: none;
+    padding: 2px 6px 2px 10px;
+    cursor: pointer;
+    color: #696d71;
+    min-width: 40px;
+    text-align: center;
+}
+#mk_options #category li .del {
+    opacity: 0;
+    margin: 0 0 0 4px;
+}
+#mk_options #category li:hover .del {
+    opacity: 1;
+}
+#mk_options #category li.active {
+    border-bottom: 2px solid #1a237e;
+    transform: translate(0px, 1px);
 }
 .mk_edit{
     width: 14px;
@@ -29,8 +81,8 @@
     border-radius: 2px;
 }
 .mk_edit:hover{
-     box-shadow:2px 2px 0 0 #8687CD;
-     text-decoration:none;
+     box-shadow: 2px 2px 0 0 #8687CD;
+     text-decoration: none;
     -webkit-transform: translate(-2px,-2px);
     transform: translate(-2px,-2px);
 }
@@ -47,7 +99,7 @@
     z-index: 9999;
     display: none;
 }
-#mk_label_settting{
+#mk_label_setting{
     width: 400px;
     height: 300px;
     background: #fff;
@@ -56,40 +108,70 @@
     margin-top: -150px;
     position: absolute;
     top: 50%;
-    font-family:arial;
-    font-size:12px!important;
+    font-family: Arial;
+    font-size: 12px !important;
     border-radius: 4px;
-    color: #000!important;
-    text-align:left!important; 
+    color: #000 !important;
+    text-align: left !important; 
 }
-
-#mk_label_settting input{
-    margin:0 6px 0!important;
-    padding:0!important;
-} 
-#mk_label_settting button{
-    font-size:12px!important;
-    color: #000!important;
-    padding: 0 5px!important;
+#mk_options input, 
+#mk_label_setting input[type=text] {
+    font-size: 12px !important;
+    margin: 0 6px !important;
+    height: 24px !important;
+    border-radius: 2px !important;
+    padding:0 5px !important;
+    border: 1px solid #8a8a8a !important;
 }
-#mk_label_settting p{
-    margin: 15px!important;
-    color: #000!important;
-    font-size:12px!important;
+#mk_label_setting input[type=radio] {
+    margin: 0 6px !important;
+    -webkit-appearance: checkbox !important;
 }
-#mk_label_settting #label_1, 
-#mk_label_settting #label_2{
-    display:none;
+#mk_label_setting input[type=radio]:checked:after {
+    content: '' !important;
 }
-#mk_label_settting #label_1 input, 
-#mk_label_settting #label_2 input{
-    height:30px!important;
-    padding: 0 3px!important;
-    width:250px!important;
+#mk_label_setting select {
+    height: 24px !important;
+    border-radius: 2px !important;
+    margin-right: 6px !important;
+    font-size: 12px !important;
 }
-.labeltype_1 #mk_label_settting #label_1,
-.labeltype_2 #mk_label_settting #label_2{
-    display:block;
+#mk_options button,
+#mk_label_setting button {
+    background: #f1eff7 !important;
+    color: #000 !important;
+    width: auto !important;
+    height: 24px !important;
+    font-family: arial !important;
+    font-size: 12px !important;
+    padding: 0 8px !important;
+    border: 1px solid #000 !important;
+    border-radius: 2px !important;
+    cursor: pointer;
+}
+#mk_options button:hover,
+#mk_label_setting button:hover {
+    background: #e5e1f1 !important;
+}
+#mk_label_setting p{
+    margin: 15px !important;
+    color: #000 !important;
+    font-size: 12px !important;
+}
+#mk_label_setting #mk_label_1, 
+#mk_label_setting #mk_label_2{
+    display: none;
+}
+#mk_label_setting #mk_label_1 input, 
+#mk_label_setting #mk_label_2 input{
+    height: 24px !important;
+    padding: 0 3px !important;
+    width: 250px !important;
+    border-radius: 2px !important;
+}
+.mk_label_type_1 #mk_label_setting #mk_label_1,
+.mk_label_type_2 #mk_label_setting #mk_label_2 {
+    display: block;
 }
 .mk_c1 {
     color: #fff;
@@ -131,8 +213,8 @@
     display: inline-block;
     font-family: Arial;
 }
-#mk_url_1, #mk_url_2{
-    color:#999
+#mk_url_site, #mk_url_page {
+    color: #999
 }
 #mk_confirm{
     height: 30px;
@@ -143,46 +225,27 @@
     float: right;
     height: 30px;
     cursor: pointer;
-    margin-left:10px;
+    margin-left: 10px;
 }
 .mk_label{
     display: inline-block;
     margin-left: 10px;
     vertical-align: text-bottom;
 }
-#label_bar{
-    font-family: arial;
-    font-size: 12px;
-    position:fixed;
-    display: block;
-    padding: 0px 5px;
-    bottom: 0;
-    right: 0;
+#mk_label_bar{
+    position: fixed;
+    bottom: 4px;
+    right: 4px;
     z-index: 9999999999;
-    text-align: left;
-    background: #fff;
-    border-radius: 4px 0 0 0;
-    border-left: 1px solid #3e51b5;
-    border-top: 1px solid #3e51b5;
-    height: 26px;
+    text-align: right;
 }
-#label_bar .mk_edit,
-#label_bar .mk_label{
-    margin-top:4px;
+#mk_label_bar .mk_edit {
+    display: none;
 }
-#mk_hide{
-    display: inline-block!important;
-    cursor: pointer!important;
-    margin-right: 6px!important;
-    margin-left: 6px!important;
-    font-size: 12px!important;
-    color: #3F51B5!important;
-    font-weight: bold!important;
+#mk_label_bar .mk_label{
+    font-size: 12px !important;
+    font-family: Arial !important;
 }
-#result td{
-    margin:5px;
-    padding: 5px 20px 5px 0;
-}
-#synurl{
-    width:400px;
+#mk_url_page {
+    word-break: break-all;
 }

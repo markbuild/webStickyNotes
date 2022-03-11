@@ -1,7 +1,73 @@
+var categoryId = -1
 document.getElementById("uploadbackupfile").addEventListener('change', (event) => {loadfile(event.target)}, false );
 document.getElementById("downloadbackup").addEventListener('mouseover', (event) => {update_backup_link()}, false );
-document.getElementById("display_all_btn").addEventListener('click', (event) => {display_all_reviews()}, false );
-document.getElementById("savesyninfo").addEventListener('click', (event) => {savesyninfo()}, false );
+document.getElementById("search_btn").addEventListener('click', (event) => { searchResult()}, false );
+document.getElementById('savesyninfo').addEventListener('click', (event) => { savesyninfo() }, false)
+document.getElementById('category').addEventListener('click', (event) => {
+    if (event.target.nodeName === 'LI') {
+        // Add new Category
+        if (event.target.getAttribute('data') == -2) {
+            var name = prompt('Please enter new category name', '')
+            if (name !== null && name !== '') {
+                chrome.runtime.sendMessage({ type: 'addLabelCategory', categoryLabelName: name }, response => {
+                    if (response.label_category) {
+                        var html = '<li data="-1" class="active">All</li><li data="0">Default</li>'
+                        response.label_category.forEach(item => {
+                            if (item.id != 0) {
+                                html += '<li data="' + item.id + '">' + item.name + '<span class="del">x</span></li>'
+                            }
+                        })
+                        html += '<li data="-2">+</li>'
+                        document.querySelector('#category').innerHTML = html
+                    }
+                })
+            }
+            return
+        }
+        document.querySelectorAll('#category li').forEach(item => {
+            item.className = ''
+        })
+        categoryId = event.target.getAttribute('data')
+        event.target.className = 'active'
+        searchResult()
+        if (categoryId > 0) {
+            var categoryName = event.target.firstChild.textContent
+            document.querySelector('#rename').innerHTML = '<input value="' + categoryName + '"> <button>Rename</button>'
+        }
+    }
+    // Remove Category
+    if (event.target.nodeName === 'SPAN') {
+        if (!confirm('Do you want Remove this category?')) {
+          return
+        }
+        chrome.runtime.sendMessage({ type: 'delLabelCategory', categoryId: event.target.parentNode.getAttribute('data') }, function (response) {
+            if (response.label_category) {
+                renderCategory(response.label_category)
+            }
+        })
+    }
+}, false);
+
+document.getElementById('result').addEventListener('click', (event) => {
+    if (event.target.className === 'del') {
+        var url = event.target.getAttribute('url')
+        var label_type = event.target.getAttribute('type')
+        chrome.runtime.sendMessage({ type: 'removeNote', url: url, label_type: label_type, index: 0 }, response => {
+            searchResult()
+        })
+    }
+}, false);
+
+document.getElementById('rename').addEventListener('click', (event) => {
+    if (event.target.nodeName === 'BUTTON') {
+        var newName = document.querySelector('#rename input').value
+        chrome.runtime.sendMessage({ type: 'updateLabelCategory', newName: newName, categoryId: categoryId }, response => {
+            if (response.label_category) {
+                renderCategory(response.label_category)
+            }
+        })
+    }
+}, false);
 
 const update_backup_link = _=> {
     chrome.runtime.sendMessage({type:'queryAllLabels'},function (response) {
@@ -10,38 +76,42 @@ const update_backup_link = _=> {
         const elem = document.getElementById("downloadbackup");
         elem.href = URL.createObjectURL(blob);
         elem.download = "webStickyNotes_database.bak";
-    });
+    })
 };
 
 const loadfile = (event_this) => {
-    var file = event_this.files[0];
-    var reader = new FileReader();
+    var file = event_this.files[0]
+    var reader = new FileReader()
     reader.onload = function() {
         var data = JSON.parse(reader.result); 
-        chrome.runtime.sendMessage({type:'importAllLabels',allLabels: data},function (response) {
+        chrome.runtime.sendMessage({type:'importAllLabels', allLabels: data},function (response) {
             if(response.success == 1) {
-                alert('Import Success');
+                alert('Import Success')
             }
-        });
-    };
-    reader.readAsText(file);
-};
+        })
+    }
+    reader.readAsText(file)
+}
 
-const display_all_reviews = _=> {
+const searchResult = _=> {
     chrome.runtime.sendMessage({type:'queryAllLabels'},function (response) {
         var html='<table>'
         var k
         var keyword = document.getElementById('search').value.toLowerCase();
         for(k in response.allLabels.site){
-            if(!keyword || (keyword && (k.toLowerCase().includes(keyword) || response.allLabels.site[k].r.toLowerCase().includes(keyword)))) 
-            html += '<tr><td><a href="https://' + k + '" target="_blank">' + k + '</a></td><td><span class="mk_c' + response.allLabels.site[k].c + '">Ⓢ ' + response.allLabels.site[k].r + '</span></td></tr>';
+            if (categoryId == -1 || response.allLabels.site[k].ct == categoryId) {
+                if(!keyword || (keyword && (k.toLowerCase().includes(keyword) || response.allLabels.site[k].r.toLowerCase().includes(keyword)))) 
+                html += '<tr><td><a href="https://' + k + '" target="_blank">' + k + '</a></td><td><span class="mk_c' + response.allLabels.site[k].c + '">Ⓢ ' + response.allLabels.site[k].r + '</span><span class="del" url="' + k + '" type="1">x</span></td></tr>';
+            }
         }
         for(k in response.allLabels.page){
-            if(!keyword || (keyword && (k.toLowerCase().includes(keyword) || response.allLabels.page[k].r.toLowerCase().includes(keyword)))) 
-            html += '<tr><td><a href="' + k + '" target="_blank">' + k + '</a></td><td><span class="mk_c' + response.allLabels.page[k].c + '">Ⓟ ' + response.allLabels.page[k].r + '</span></td></tr>';
+            if (categoryId == -1 || response.allLabels.page[k].ct == categoryId) {
+                if(!keyword || (keyword && (k.toLowerCase().includes(keyword) || response.allLabels.page[k].r.toLowerCase().includes(keyword)))) 
+                html += '<tr><td><a href="' + k + '" target="_blank">' + k + '</a></td><td><span class="mk_c' + response.allLabels.page[k].c + '">Ⓟ ' + response.allLabels.page[k].r + '</span><span class="del" url="' + k + '" type="2">x</span></td></tr>';
+            }
         }
         document.getElementById('result').innerHTML = html + '</table>';
-    });
+    })
 };
 
 const savesyninfo = _=> {
@@ -74,6 +144,17 @@ function formatdate(_timestamp) {
     return y + '-' + m + '-' + d + ' ' + h + ':' + i + ':' + s;
 }
 
+const renderCategory = _category => {
+    var html = '<li data="-1" class="active">All</li><li data="0">Default</li>'
+    _category.forEach(item => {
+        if (item.id != 0) {
+            html += '<li data="' + item.id + '">' + item.name + '<span class="del">x</span></li>'
+        }
+    })
+    html += '<li data="-2">+</li>'
+    document.querySelector('#category').innerHTML = html
+}
+
 chrome.runtime.sendMessage({type:'getSynInfo'},function (response) {
     if(response.success == 1) {
         document.getElementById("synurl").value = response.synurl;
@@ -82,3 +163,10 @@ chrome.runtime.sendMessage({type:'getSynInfo'},function (response) {
         document.getElementById("last_syn_time").innerText = '(Last sync time: ' + formatdate(1000 * response.syntime) + ')';
     }
 })
+
+chrome.runtime.sendMessage({type:'queryLabelCategory' }, response => {
+    if (response.success == 1) {
+        renderCategory(response.data)
+    }
+})
+searchResult()

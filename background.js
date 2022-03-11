@@ -1,81 +1,167 @@
-if(!localStorage.getItem('site_label')) { // Init Setting
-    localStorage.setItem('site_label', JSON.stringify({}));
+/* Init Local Data */
+if (!localStorage.getItem('site_label')) {
+    localStorage.setItem('site_label', JSON.stringify({}))
 }
-if(!localStorage.getItem('page_label')) { // Init Setting
-    localStorage.setItem('page_label', JSON.stringify({}));
+if (!localStorage.getItem('page_label')) {
+    localStorage.setItem('page_label', JSON.stringify({}))
 }
-if(!localStorage.getItem('backup_time')) { // Init Setting
-    var time = parseInt(new Date().getTime()/1000)
-    localStorage.setItem('backup_time', time);
+if (!localStorage.getItem('label_category')) {
+    localStorage.setItem('label_category', JSON.stringify([{ id: 0, name: 'Default' }]))
 }
-if(navigator.userAgent.includes("Firefox")) {
-    chrome = browser;
-} 
-chrome.runtime.onMessage.addListener((request,sender,sendResponse) => {
+if (!localStorage.getItem('backup_time')) {
+    var time = parseInt(new Date().getTime() / 1000)
+    localStorage.setItem('backup_time', time)
+}
+if (navigator.userAgent.includes("Firefox")) {
+    chrome = browser
+}
+
+
+/** Menu **/
+chrome.contextMenus.create({
+    title : "Set Sticky Note",
+    onclick : function(info,tab) {
+      chrome.tabs.sendMessage(tab.id, { info: 'setNote' })
+    }
+})
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // console.log(request)
     switch(request.type) {
-        case 'insertLabel':
-            if(request.label_type == 1) {
-                var site_label = JSON.parse(localStorage.getItem('site_label'))
-                site_label[request.url] = {c:request.color, r:request.label}
-                localStorage.setItem('site_label', JSON.stringify(site_label))
-            } else if(request.label_type == 2) {
-                var page_label = JSON.parse(localStorage.getItem('page_label'))
-                page_label[request.url] = {c:request.color,r:request.label}
-                localStorage.setItem('page_label', JSON.stringify(page_label))
+        case 'setNote':
+            var label_type = request.label_type == 1  ? 'site_label' : 'page_label'
+            var labels = getLocalJson(label_type)
+            labels[request.url] = {
+                c: request.color,
+                r: request.label,
+                ct: request.category
             }
+            localStorage.setItem(label_type, JSON.stringify(labels))
             sendResponse({success: 1, label_type: request.label_type, label:request.label, color: request.color, index: request.index});
-            if(localStorage.getItem('synurl')){ // 异步任务
-                sync_write();
+            if(localStorage.getItem('synurl')) { // 异步任务
+                sync_push()
             }
-            break;
-        case 'removeLabel':
-            if(request.label_type == 1) {
+            break
+        case 'removeNote':
+            var label_type = request.label_type == 1  ? 'site_label' : 'page_label'
+            var labels = getLocalJson(label_type)
+            delete labels[request.url]
+            localStorage.setItem(label_type, JSON.stringify(labels))
+            sendResponse({success: 1, index: request.index, label_type: request.label_type})
+            if (localStorage.getItem('synurl')) { // 异步任务
+                sync_push()
+            }
+            break
+        case 'queryLabelByUrl':
+            if (request.label_type == 1) {
                 var site_label = JSON.parse(localStorage.getItem('site_label'))
-                delete site_label[request.url];
-                localStorage.setItem('site_label', JSON.stringify(site_label))
+                var result = site_label[request.url]
             } else if(request.label_type == 2) {
                 var page_label = JSON.parse(localStorage.getItem('page_label'))
-                delete page_label[request.url];
-                localStorage.setItem('page_label', JSON.stringify(page_label))
+                var result = page_label[request.url]
             }
-            sendResponse({success: 1, index: request.index, label_type: request.label_type});
-            if(localStorage.getItem('synurl')){ // 异步任务
-                sync_write();
-            }
-            break;
-        case 'queryLabel':
-            if(request.label_type == 1) {
-                var site_label = JSON.parse(localStorage.getItem('site_label'))
-                var result = site_label[request.url];
-            } else if(request.label_type == 2) {
-                var page_label = JSON.parse(localStorage.getItem('page_label'))
-                var result = page_label[request.url];
-            }
-            if(result) {
-                sendResponse({success: 1, label: result.r, color: result.c, index: request.index, label_type: request.label_type});
+            if (result) {
+                sendResponse({ 
+                    success: 1,
+                    label: result.r,
+                    color: result.c,
+                    category: result.ct,
+                    index: request.index,
+                    label_type: request.label_type
+                })
             } else {
-                sendResponse({success: 0});
+                sendResponse({ 
+                    success: 0,
+                    label: '',
+                    color: 1,
+                    category: 0,
+                    index: request.index,
+                    label_type: request.label_type 
+                })
             }
-            break;
+            break
         case 'queryAllLabels':
-            var site_label = JSON.parse(localStorage.getItem('site_label'))
-            var page_label = JSON.parse(localStorage.getItem('page_label'))
-            sendResponse({success: 1, allLabels: {site: site_label, page: page_label}})
-            break;
+            sendResponse({
+                success: 1,
+                allLabels: {
+                  site: getLocalJson('site_label'),
+                  page: getLocalJson('page_label'),
+                  category: getLocalJson('label_category')
+                }
+            })
+            break
         case 'importAllLabels':
             localStorage.setItem('site_label', JSON.stringify(request.allLabels.site))
             localStorage.setItem('page_label', JSON.stringify(request.allLabels.page))
-            sendResponse({success: 1});
-            if(localStorage.getItem('synurl')){
-                sync_write();
+            localStorage.setItem('page_label', JSON.stringify(request.allLabels.category))
+            sendResponse({ success: 1 })
+            if(localStorage.getItem('synurl')) {
+                sync_push()
             }
+            break
+        case 'addLabelCategory':
+            if (request.categoryLabelName) {
+                var category = getLocalJson('label_category')
+                if (category.filter(item => item.name === request.categoryLabelName).length === 0) {
+                    var id = category.reverse()[0].id + 1
+                    category.push({ id: id, name: request.categoryLabelName })
+                    localStorage.setItem('label_category', JSON.stringify(category.sort((a, b) => a.id - b.id)))
+                    sendResponse({ success: 1, label_category: category })
+                    if(localStorage.getItem('synurl')) {
+                        sync_push()
+                    }
+                }
+            }
+            break;
+        case 'delLabelCategory':
+            if (request.categoryId) {
+                var category = getLocalJson('label_category')
+                category = category.filter(item => item.id != request.categoryId)
+                var site_label = getLocalJson('site_label')
+                Object.keys(site_label).forEach(item => {
+                    if (site_label[item].ct == request.categoryId) {
+                        site_label[item].ct = 0
+                    }
+                })
+                var page_label = getLocalJson('page_label')
+                Object.keys(page_label).forEach(item => {
+                    if (page_label[item].ct == request.categoryId) {
+                        page_label[item].ct = 0
+                    }
+                })
+                localStorage.setItem('site_label', JSON.stringify(site_label))
+                localStorage.setItem('page_label', JSON.stringify(page_label))
+                localStorage.setItem('label_category', JSON.stringify(category.sort((a, b) => a.id - b.id)))
+                sendResponse({ success: 1, label_category: category })
+                if(localStorage.getItem('synurl')) {
+                    sync_push()
+                }
+            }
+            break;
+        case 'updateLabelCategory':
+            if (request.categoryId && request.newName) {
+                var category = getLocalJson('label_category')
+                category.forEach(item => {
+                    if (item.id == request.categoryId) {
+                        item.name = request.newName
+                    }
+                })
+                localStorage.setItem('label_category', JSON.stringify(category.sort((a, b) => a.id - b.id)))
+                sendResponse({ success: 1, label_category: category })
+                if(localStorage.getItem('synurl')) {
+                    sync_push()
+                }
+            }
+            break;
+        case 'queryLabelCategory':
+            sendResponse({ success: 1, data: getLocalJson('label_category') })
             break;
         case 'saveSynInfo':
             const doSomethingWith = async () => {
-                return await sync_read((_res) => {
+                return await sync_pull((_res) => {
                     localStorage.setItem('site_label', JSON.stringify(_res.site))
                     localStorage.setItem('page_label', JSON.stringify(_res.page))
+                    localStorage.setItem('label_category', JSON.stringify(_res.category))
                 })
             }
             let synurl = request.synurl;
@@ -86,16 +172,16 @@ chrome.runtime.onMessage.addListener((request,sender,sendResponse) => {
             localStorage.setItem('synpassword', synpassword)
             localStorage.setItem('syntime', parseInt(new Date().getTime()/1000))
             doSomethingWith().then(sendResponse({success: 1}));
-            break;
+            break
         case 'getSynInfo':
-            if(localStorage.getItem('synurl')){
-                sendResponse({success: 1, synurl: localStorage.getItem('synurl'), synusername: localStorage.getItem('synusername'), synpassword: localStorage.getItem('synpassword'), syntime: localStorage.getItem('syntime')})
+            if (localStorage.getItem('synurl')) {
+                sendResponse({ success: 1, synurl: localStorage.getItem('synurl'), synusername: localStorage.getItem('synusername'), synpassword: localStorage.getItem('synpassword'), syntime: localStorage.getItem('syntime')})
             } else {
                 sendResponse({success: 0 })
             }
-            break;
+            break
     }
-});
+})
 
 /**
  *
@@ -168,7 +254,11 @@ var Base64 = {
     }
 }
 
-const sync_read = _callback => {
+const getLocalJson = _type => {
+  return JSON.parse(localStorage.getItem(_type))
+}
+const sync_pull = _callback => {
+    return
     let username = localStorage.getItem('synusername');
     let password = localStorage.getItem('synpassword');
     let url = localStorage.getItem('synurl');
@@ -181,35 +271,39 @@ const sync_read = _callback => {
         credentials: "same-origin"
     }).then(response => response.json()).then(myJson => {
         _callback(myJson);
-    }).catch(error => console.log(error));
+    }).catch(error => alert('webStickyNotes Config ERROR' + error))
 }
-const sync_write = _=> {
-    let site_label = JSON.parse(localStorage.getItem('site_label'))
-    let page_label = JSON.parse(localStorage.getItem('page_label'))
-    let str = JSON.stringify({site: site_label, page: page_label});
+const sync_push = _=> {
+    let bodyData = JSON.stringify({
+        site: getLocalJson('site_label'),
+        page: getLocalJson('page_label'),
+        category: getLocalJson('label_category')
+    })
     let username = localStorage.getItem('synusername');
     let password = localStorage.getItem('synpassword');
     let url = localStorage.getItem('synurl');
     let auth_header = 'Basic ' + Base64.encode(username + ':' +password);
     fetch(url, {
         method: 'PUT',
-        body: str,
+        body: bodyData,
         headers: new Headers({
             "Authorization": auth_header
         }),
         credentials: "same-origin"
     }).then(response => {})
 }
-setInterval(function () {
-    if(localStorage.getItem('synurl')) {
-        var time = parseInt(new Date().getTime()/1000)
+/* Synchronisation every 5 minutes */
+if (localStorage.getItem('synurl')) {
+    setInterval(function () {
+        var time = parseInt(new Date().getTime() / 1000)
         var last_syn_time = localStorage.getItem('syntime')
-        if(time - last_syn_time > 300){ // Synchronisation interval: 5 minutes
-            sync_read(function(_res) {
-                localStorage.setItem('site_label', JSON.stringify(_res.site))
-                localStorage.setItem('page_label', JSON.stringify(_res.page))
-                localStorage.setItem('syntime', parseInt(new Date().getTime()/1000))
+        if (time - last_syn_time > 300) { // Synchronisation interval: 5 minutes
+            sync_pull(function (_res) {
+                localStorage.setItem('site_label', JSON.stringify(_res.site_label))
+                localStorage.setItem('page_label', JSON.stringify(_res.page_label))
+                localStorage.setItem('label_category', JSON.stringify(_res.label_category))
+                localStorage.setItem('syntime', parseInt(new Date().getTime() / 1000))
             })
         }
-    }
-},60000); // 1 minutes
+    }, 60000); // 1 minutes
+}

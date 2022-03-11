@@ -24,11 +24,13 @@ Get More information from <a href="https://github.com/markbuild/webStickyNotes/b
     </div>
     <div style="clear:both"></div>
     <h2>Synchronize your database with WebDAV</h2>
-    WebDAV URL: <input id="synurl" placeholder="eg: https://dav.jianguoyun.com/dav/sync/webStickyNotes_database.bak"> Username: <input id="synusername"> Password: <input id="synpassword" type="password"> <button id="savesyninfo">Save and Fetch</button> <span id="last_syn_time"></span>
-    <p><a href="https://github.com/markbuild/webStickyNotes/blob/master/HowToEnableWebDAV.md" target="_blank">How to enable WebDAV?</a></p>
+    WebDAV URL: <input id="synurl" placeholder="eg: https://dav.jianguoyun.com/dav/sync/webStickyNotes_database.bak"> Username: <input id="synusername"> Password: <input id="synpassword" type="password"> <button id="savesyninfo">Save Pull Data from WebDAV</button> <span id="last_syn_time"></span>
+    <p><a href="https://markbuild.com/how-to-enable-webdav/" target="_blank">How to enable WebDAV?</a></p>
     <h2>Database</h2>
-    <input id="search" placeholder="Search sticky note Labels">
-    <button id="display_all_btn">Search</button> <span style="color:#aaa">(Empty search input returns all sticky note labels)</span>
+    <div id="category"></div>
+    <input id="search" placeholder="Search Notes">
+    <button id="search_btn">Search</button>
+    <div id="rename"></div>
     <div id="result"></div>
 </div>
 <script src="options.js"></script>

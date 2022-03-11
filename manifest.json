@@ -1,11 +1,11 @@
 ﻿{
 	"name": "webStickyNotes",
-	"version": "2.0.4",
+	"version": "2.2.3",
 	"manifest_version": 2,
 	"description":"Add Web Sticky Notes on your browser",
 	"icons": {"48": "source/48.png"},
 
-	"permissions": [ "contextMenus", "\u003Call_urls>", "activeTab",  "storage" ],
+	"permissions": [ "contextMenus", "\u003Call_urls>", "activeTab" ],
 
 	"browser_action": {
 		"default_icon": "source/48.png",
