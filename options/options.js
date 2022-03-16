@@ -122,6 +122,7 @@ const savesyninfo = _=> {
         chrome.runtime.sendMessage({type:'saveSynInfo', synurl: synurl, synusername: synusername, synpassword: synpassword},function (response) {
             if(response.success == 1){
                 alert('Synchronized successful')
+                location.reload()
             }
         });
     } else {
