@@ -258,7 +258,6 @@ const getLocalJson = _type => {
   return JSON.parse(localStorage.getItem(_type))
 }
 const sync_pull = _callback => {
-    return
     let username = localStorage.getItem('synusername');
     let password = localStorage.getItem('synpassword');
     let url = localStorage.getItem('synurl');

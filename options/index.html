@@ -3,12 +3,92 @@
 <head>
 <meta charset="utf-8">
 <link href="../source/mkstyles.css" rel='stylesheet' type='text/css'>
+<style>
+body {
+  font-size: 14px;
+  font-family: 'pingfang sc', 'microsoft yahei', 'arial';
+}
+#mk_options a {
+    color: #1a237e;
+}
+#mk_options input[type="file" i]::-webkit-file-upload-button {
+    border: 0;
+    line-height: 22px;
+}
+#mk_options .box {
+    border: 1px solid #000;
+    float: left;
+    width: 500px;
+    margin-right: 20px;
+    height: 130px;
+    background: #ebebeb;
+    padding: 15px;
+}
+#mk_options .box h3{
+    margin: 0;
+}
+#mk_options #rename {
+    display: inline-block;
+    float: right;
+}
+#mk_options #result {
+    margin: 20px 0;
+    height: 400px;
+    overflow-y: scroll;
+    background: #ececf6;
+}
+#mk_options #result td{
+    margin:5px;
+    padding: 5px 20px 5px 0;
+}
+#mk_options #result td .del {
+    opacity: 0;
+    margin-left: 10px;
+    cursor: pointer;
+}
+#mk_options #result td:hover .del {
+    opacity: 1;
+}
+#mk_options #synurl {
+    width: 400px;
+}
+#mk_options #category {
+    height: 24px;
+    display: flex;
+    background: #f0f3f4;
+    margin: 10px 0;
+    border: 1px solid #d0d3d6;
+}
+#mk_options #category li {
+    list-style: none;
+    padding: 2px 6px 2px 10px;
+    cursor: pointer;
+    color: #696d71;
+    min-width: 40px;
+    text-align: center;
+}
+#mk_options #category li .del {
+    opacity: 0;
+    margin: 0 0 0 4px;
+}
+#mk_options #category li:hover .del {
+    opacity: 1;
+}
+#mk_options #category li.active {
+    border-bottom: 2px solid #1a237e;
+    transform: translate(0px, 1px);
+}
+</style>
 </head>
 <body id="mk_options">
-<h1>webStickyNotes Extension Options</h1>
-<p><img src="../source/128.png" /></p>
-Get More information from <a href="https://github.com/markbuild/webStickyNotes/blob/master/README.md" target="_blank">here</a>.
+<h1>webStickyNotes</h1>
 <div>
+    <h2>Database</h2>
+    <div id="category"></div>
+    <input id="search" placeholder="Search Notes">
+    <button id="search_btn">Search</button>
+    <div id="rename"></div>
+    <div id="result"></div>
     <h2>Backup and Restore the database</h2>
     <div class="box">
         <h3>Backup</h3>
@@ -26,12 +106,10 @@ Get More information from <a href="https://github.com/markbuild/webStickyNotes/b
     <h2>Synchronize your database with WebDAV</h2>
     WebDAV URL: <input id="synurl" placeholder="eg: https://dav.jianguoyun.com/dav/sync/webStickyNotes_database.bak"> Username: <input id="synusername"> Password: <input id="synpassword" type="password"> <button id="savesyninfo">Save Pull Data from WebDAV</button> <span id="last_syn_time"></span>
     <p><a href="https://markbuild.com/how-to-enable-webdav/" target="_blank">How to enable WebDAV?</a></p>
-    <h2>Database</h2>
-    <div id="category"></div>
-    <input id="search" placeholder="Search Notes">
-    <button id="search_btn">Search</button>
-    <div id="rename"></div>
-    <div id="result"></div>
+    <h2>Other Info</h2>
+    Get More information from <a href="https://github.com/markbuild/webStickyNotes/blob/master/README.md" target="_blank">here</a>.
+    <p><img src="../source/128.png" /></p>
+    &copy; Markbuild.com
 </div>
 <script src="options.js"></script>
 </body>
