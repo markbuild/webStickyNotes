@@ -270,7 +270,7 @@ const sync_pull = _callback => {
         credentials: "same-origin"
     }).then(response => response.json()).then(myJson => {
         _callback(myJson);
-    }).catch(error => alert('webStickyNotes Config ERROR' + error))
+    }).catch(error => console.log('webStickyNotes Config ERROR' + error))
 }
 const sync_push = _=> {
     let bodyData = JSON.stringify({
@@ -298,9 +298,9 @@ if (localStorage.getItem('synurl')) {
         var last_syn_time = localStorage.getItem('syntime')
         if (time - last_syn_time > 300) { // Synchronisation interval: 5 minutes
             sync_pull(function (_res) {
-                localStorage.setItem('site_label', JSON.stringify(_res.site_label))
-                localStorage.setItem('page_label', JSON.stringify(_res.page_label))
-                localStorage.setItem('label_category', JSON.stringify(_res.label_category))
+                localStorage.setItem('site_label', JSON.stringify(_res.site))
+                localStorage.setItem('page_label', JSON.stringify(_res.page))
+                localStorage.setItem('label_category', JSON.stringify(_res.category))
                 localStorage.setItem('syntime', parseInt(new Date().getTime() / 1000))
             })
         }
